@@ -1,0 +1,32 @@
+require("dotenv").config();
+const express=require("express")
+const app=express();
+const port=5000;
+const adminrout=require("./Routes/AdminRoute")
+const mongoose=require("mongoose")
+
+
+
+app.use(express.json())
+
+
+const MongoDb="mongodb://127.0.0.1:27017/E-commerce_BackEnd";
+main().catch((err)=>{
+    console.log(err);
+})
+
+async function main(){
+    await mongoose.connect(MongoDb)
+    console.log("Db connected");
+}
+
+
+
+
+app.use("/api/admin",adminrout)
+
+
+
+app.listen(port,()=>{
+    console.log("server is running...",port);
+})
