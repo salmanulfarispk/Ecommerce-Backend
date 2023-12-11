@@ -2,7 +2,7 @@ const userSchemaData=require("../models/userSchema")
 const {joiuserSchema}=require("../models/validationSchema")
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
-
+const Allproducts=require("../models/productSchema")
 
 
 
@@ -98,8 +98,64 @@ userlogin: async(req,res)=>{
             })
 },
 
+   //user view all products
 
+   viewAllProduct: async(req,res)=>{
+      const products=await Allproducts.find()
+      if(!products){
+        return res.status(404).json({
+            status:"error",
+            message:"products not found"
+         })
+      }
+      return res.status(200).json({
+         status:"success",
+         message:"All products founded succesfully",
+         datas:{products}
+      })
+
+   },
       
+   //user view specific product
+
+   viewproductById: async(req,res)=>{
+      const productid=req.params.id;
+      const product= await Allproducts.findById(productid)
+      if(!product){
+         return res.status(404).json({
+            status:"error",
+            message:"product not found"
+         })
+      }
+      res.status(200).json({
+         status:"success",
+         message:"product founded succesfuly",
+         data:{product}
+      })
+
+   },
+
+   //view product by category
+
+   productByCategory: async(req,res)=>{
+      const prodByCategry=req.params.categoryname;
+      const product= await Allproducts.find({category:prodByCategry})
+      if(!product){
+         return res.status(404).json({
+            status:"error",
+            message:"product not found"
+         })
+      }
+      res.status(200).json({
+         status:"success",
+         message:"product founded sucesfuly",
+         data:product
+      })
+   },
+
+   
+
+
 
 
 

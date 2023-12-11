@@ -4,6 +4,8 @@ const router=express.Router()
 const Trycatchmiddleware=require("../middlewares/TryCatchmiddleware")
 const usercontroler=require("../controllers/userController")
 
+const verifyToken=require("../middlewares/userAuthentication")
+
 
 
 router
@@ -12,7 +14,10 @@ router
 .post('/login',Trycatchmiddleware(usercontroler.userlogin))
 
 
+.use(verifyToken)
 
+.get('/Allproducts',Trycatchmiddleware(usercontroler.viewAllProduct))
+.get("/products/:id",Trycatchmiddleware(usercontroler.viewproductById))
+.get("/products/category/:categoryname",Trycatchmiddleware(usercontroler.productByCategory))
 
-
-module.exports= router
+module.exports= router     

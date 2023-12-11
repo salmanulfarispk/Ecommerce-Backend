@@ -2,6 +2,7 @@ const jwt=require("jsonwebtoken")
 const userDatabase=require("../models/userSchema")
 const Allproducts=require("../models/productSchema")
 const {joiproductSchema}=require("../models/validationSchema")
+const { default: mongoose } = require("mongoose")
 
 
 
@@ -108,6 +109,89 @@ module.exports={
         })
 
     },
+
+
+   //Admin delete products
+    deleteproduct: async(req,res)=>{
+      const {productid}=req.body;
+
+      if(!productid || !mongoose.Types.ObjectId.isValid(productid)){
+        res.status(404).json({
+          status:"error",
+          "message":"invalid product Id"
+        })
+      }
+      const productdelete= await Allproducts.findOneAndDelete({_id:productid})
+      if(!productdelete){
+        return res.status(404).json({
+          status:"product not found in database"
+        })
+      }
+      return res.status(200).json({
+        status:"successs",
+        message:"product succesfully deleted"
+      })
+
+    },
+
+
+    //Admin view all product
+
+  viewAllproducts: async(req,res)=>{
+    const productlist= await Allproducts.find()
+    if(!productlist){
+      return res.status(404).json({
+        status:"error",
+        message:"products not found"
+      })
+    }
+    res.status(200).json({
+      status:"success",
+      message:"products founded succesfully",
+      datas:productlist
+    })
+  },
+
+
+
+  //Admin edit products
+
+   editproducts: async(req,res)=>{
+      const {value,error}= joiproductSchema.validate(req.body)
+      if(error){
+        return res.status(404).json({
+          status:"error",
+          message:error.details[0].message
+        })
+      }
+
+      const {id,title,image,price,category,description}=value;
+      const product= await Allproducts.find()
+      if(!product){
+        return res.status(404).json({
+          status:"error",
+          message:"product not found"
+        })
+      }
+      await Allproducts.findByIdAndUpdate({
+        _id:id},
+        {
+         title,
+         image,
+         price,
+         category,
+         description
+        }
+      )
+
+      res.status(200).json({
+        status:"success",
+        message:"product succesfully updated/edited"
+      }) 
+
+
+   },
+
 
 
 

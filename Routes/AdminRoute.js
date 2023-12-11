@@ -19,6 +19,9 @@ router
 .get("/Allusers",Trycatchmiddleware(admincontroller.viewallusers))
 .get("/Allusers/:id",Trycatchmiddleware(admincontroller.viewById)) 
 .post("/Allproducts",Trycatchmiddleware(admincontroller.addproducts))
+.get("/products",Trycatchmiddleware(admincontroller.viewAllproducts))
+.delete("/Allproducts",Trycatchmiddleware(admincontroller.deleteproduct))
+.put("/products",Trycatchmiddleware(admincontroller.editproducts))
 
-
+ 
 module.exports=router
