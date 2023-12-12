@@ -153,7 +153,11 @@ userlogin: async(req,res)=>{
       })
    },
 
-   
+   //Add product to the cart
+
+   AddtoCart:async(req,res)=>{
+      
+   }
 
 
 

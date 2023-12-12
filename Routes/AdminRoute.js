@@ -1,11 +1,12 @@
 const express=require("express")
 const router=express.Router();
 const admincontroller=require("../controllers/AdminController")
-const verifytoken=require("../middlewares/AdiminAuthentication")
+
 
 //middlewares
 const Trycatchmiddleware=require("../middlewares/TryCatchmiddleware")
-
+const verifytoken=require("../middlewares/AdiminAuthentication")
+const imageuploading=require("../middlewares/imageUploader/imageuploader")
 
 
 
@@ -18,9 +19,9 @@ router
 
 .get("/Allusers",Trycatchmiddleware(admincontroller.viewallusers))
 .get("/Allusers/:id",Trycatchmiddleware(admincontroller.viewById)) 
-.post("/Allproducts",Trycatchmiddleware(admincontroller.addproducts))
+.post("/products",imageuploading,Trycatchmiddleware(admincontroller.addproducts))
 .get("/products",Trycatchmiddleware(admincontroller.viewAllproducts))
-.delete("/Allproducts",Trycatchmiddleware(admincontroller.deleteproduct))
+.delete("/products",Trycatchmiddleware(admincontroller.deleteproduct))
 .put("/products",Trycatchmiddleware(admincontroller.editproducts))
 
  

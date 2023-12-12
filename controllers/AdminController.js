@@ -26,7 +26,7 @@ module.exports={
       return res.status(200).json({
         status:"success",
         message:"Admin login succesfully",
-        data:token,
+        data:token
       });
 
    }else{
@@ -90,7 +90,7 @@ module.exports={
           return res.status(404).json({
             error:error.details[0].message
           })
-        }
+        } 
 
         const {title,price,category,description,image}=value;
         await Allproducts.create({
@@ -100,7 +100,7 @@ module.exports={
           price,
           description
 
-        })
+        })    
 
         res.status(201).json({
           status:"success",
@@ -113,15 +113,16 @@ module.exports={
 
    //Admin delete products
     deleteproduct: async(req,res)=>{
-      const {productid}=req.body;
+      const {id}=req.body;
+      //  console.log(productid); 
 
-      if(!productid || !mongoose.Types.ObjectId.isValid(productid)){
+      if(!id || !mongoose.Types.ObjectId.isValid(id)){
         res.status(404).json({
           status:"error",
           "message":"invalid product Id"
         })
       }
-      const productdelete= await Allproducts.findOneAndDelete({_id:productid})
+      const productdelete= await Allproducts.findOneAndDelete({_id:id})
       if(!productdelete){
         return res.status(404).json({
           status:"product not found in database"
