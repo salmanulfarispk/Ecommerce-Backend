@@ -26,7 +26,7 @@ module.exports={
       return res.status(200).json({
         status:"success",
         message:"Admin login succesfully",
-        data:token
+        token:token
       });
 
    }else{
@@ -54,7 +54,7 @@ module.exports={
         res.status(200).json({
           status:"successs",
           message:"All users succesfully founded",
-          data:{allusers}
+          data:allusers
         })
       }
 
@@ -85,7 +85,8 @@ module.exports={
   //Add/create products
 
     addproducts: async(req,res)=>{
-        const {value,error}= await joiproductSchema.validate(req.body);
+
+        const {value,error}=  joiproductSchema.validate(req.body);
         if(error){
           return res.status(404).json({
             error:error.details[0].message
