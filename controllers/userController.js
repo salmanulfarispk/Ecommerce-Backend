@@ -3,7 +3,9 @@ const {joiuserSchema}=require("../models/validationSchema")
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const Allproducts=require("../models/productSchema")
-const { objectId } = require("mongoose").Types;
+
+
+
 
 
 
@@ -152,59 +154,8 @@ userlogin: async(req,res)=>{
          data:product
       })
    },
-
-   //Add product to the cart
-
-   AddtoCart:async(req,res)=>{
-      const userId= req.params.id;
-      // console.log(typeof(userId));
-
-      const user= await userSchemaData.findById(userId)
-      // console.log(user); 
-
-      if(!user){
-         return res.status(404).json({
-            status:"error",
-            message:"user not found"
-         })
-      }
-
-      const {productId}=req.body;
-
-      if(!productId){
-         return res.status(404).json({status:"error",message:"product not found"})
-      }
-      
-      if(!objectId.isValid(productId)){
-         return res.status(400).json({
-            status:"error",
-            message:"invalid product id"
-         })
-      }
-      
-      const productObject={
-         productsid:new objectId(productId),
-         quantity:req.body.quantity
-      }
-
-      try{
-         await userSchemaData.updateOne({_id: user._id }, { $addToSet:{ cart:productObject }}                       )
-        res.status(200).json({
-         status:"success",
-         message:"product succesfully added to cart"
-        })
-      }catch(error){
-         res.status(500).json({
-            status:"error",
-            message:"internal server error"
-         })
-         console.log(error);
-      }
-
-
-   },
-
-
+   
+   //add to cart
 
 
 

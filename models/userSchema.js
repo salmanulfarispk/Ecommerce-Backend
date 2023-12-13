@@ -11,13 +11,7 @@ const userSchema= new mongoose.Schema({
     email:String,
     username:String,
     password:String, 
-    cart:[
-        {
-        productsid:{type:mongoose.Schema.ObjectId, ref: "allproducts"},
-        quantity: { type: Number, default: 1 },
-       
-        } ]
-     
+
 })
 
 
