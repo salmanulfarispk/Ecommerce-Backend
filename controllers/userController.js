@@ -94,11 +94,7 @@ userlogin: async(req,res)=>{
     res.setHeader(
       "Set-Cookie",
       cookie.serialize("token", token, {
-        httpOnly: true,
-        maxAge: 8500,
-        path: "/",
-       })
-       );  
+          httpOnly: true, maxAge: 8500, path: "/" , }));
      
       
             res.status(200).json({
