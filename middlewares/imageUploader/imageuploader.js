@@ -40,7 +40,7 @@ const imageUpload=(req,res, next)=>{
             const result=await cloudinary.uploader.upload(req.file.path,{
                 folder:"Ecomerce-images"
             })
-
+           
             req.body.image=result.secure_url
 
             //delete local files

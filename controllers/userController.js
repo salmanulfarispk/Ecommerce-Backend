@@ -10,9 +10,6 @@ const { ObjectId } = require('mongoose').Types;
 
 
 
-
-
-
 module.exports={
 
 //user registration
@@ -83,7 +80,7 @@ userlogin: async(req,res)=>{
          message:"invalid input"
       })
     }
-
+     
     const passwordmatch= await bcrypt.compare(password,user.password)
     if(!passwordmatch){
       return res.status(401).json({
@@ -93,12 +90,12 @@ userlogin: async(req,res)=>{
     }
       
     const token= jwt.sign({email:user.email},process.env.USER_ACCES_TOKEN_SECRET,{expiresIn:8500})
-
+     
       
             res.status(200).json({
                status:"success",
                message:"login succesfull",
-               data:{id,email,token}
+               data:id,email,token
             })
 },
 
@@ -143,6 +140,7 @@ userlogin: async(req,res)=>{
 
    productByCategory: async(req,res)=>{
       const prodByCategry=req.params.categoryname;
+     
       const product= await Allproducts.find({category:prodByCategry})
       if(!product){
          return res.status(404).json({
@@ -207,9 +205,10 @@ userlogin: async(req,res)=>{
       }
   },
 
+   
 
-   //view cart
 
+ 
    
 
  

@@ -7,14 +7,12 @@ const mongoose=require("mongoose")
 const userrout=require("./Routes/UserRouter")
 
 
-app.use(express.json())
 
 
 const MongoDb="mongodb://127.0.0.1:27017/E-commerce_BackEnd";
 main().catch((err)=>{
     console.log(err);
 })
-
 async function main(){
     await mongoose.connect(MongoDb)
     console.log("Db connected");
@@ -22,6 +20,7 @@ async function main(){
 
 
 
+app.use(express.json())
 
 app.use("/api/admin",adminrout)
 app.use("/api/users",userrout)
