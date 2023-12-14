@@ -5,7 +5,7 @@ const jwt=require("jsonwebtoken")
 const Allproducts=require("../models/productSchema")
 const userSchemaData=require("../models/userSchema")
 const { ObjectId } = require('mongoose').Types;
-
+const cookie=require("cookie")
 
 
 
@@ -90,6 +90,14 @@ userlogin: async(req,res)=>{
     }
       
     const token= jwt.sign({email:user.email},process.env.USER_ACCES_TOKEN_SECRET,{expiresIn:8500})
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("token", token, {
+        httpOnly: true,
+        maxAge: 8500,
+        path: "/",
+       })
+       );  
      
       
             res.status(200).json({

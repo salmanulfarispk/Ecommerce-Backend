@@ -15,6 +15,6 @@ module.exports= verifyToken=(req,res, next)=>{
             return res.status(401).json({error:"unauthorized"})
         }
         req.email=decode.email;
-        next()
+        next() 
     })
 }
