@@ -22,9 +22,10 @@ router
 .post("/:id/cart",Trycatchmiddleware(usercontroler. addToCart))
 .get("/:id/cart",Trycatchmiddleware(usercontroler.viewcart))
 .delete("/:id/cart/:proid",Trycatchmiddleware(usercontroler.dltCartProdct))
+.post("/:id/wishlist",Trycatchmiddleware(usercontroler.addTowishlist))
 
 module.exports= router             
 
-
-
+ 
+ 
        

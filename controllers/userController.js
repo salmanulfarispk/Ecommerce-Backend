@@ -271,6 +271,46 @@ userlogin: async(req,res)=>{
 
 
  },
+
+    //Add product to wishlist
+
+    addTowishlist: async(req,res)=>{
+    const userId=req.params.id;
+    const user=await userSchemaData.findById(userId)
+    if(!user){
+      res.status(404).json({
+         status:"errror",
+         message:"user not found"
+      })
+    }
+      
+      const { productId }=req.body;
+      const product= await Allproducts.findById(productId)
+      // console.log(product);
+      if(!product){
+         res.status(404).json({
+            message:"product not found"
+         })
+      }
+ 
+ 
+    const  findproducts=await userSchemaData.findOne({_id:userId, wishlist: productId})
+   //  console.log(findproducts);
+     if(findproducts){
+      res.status(409).json({
+         status:"conflict",
+         message:"product already on wishlist"
+      })
+     }
+      
+
+     await userSchemaData.updateOne({_id:userId},{$push:{ wishlist: product }})
+        res.status(201).json({
+         status:"success",
+         message:"product added to wishlist succesfuly!"
+        })
+
+ }, 
     
 
  
