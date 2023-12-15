@@ -294,25 +294,26 @@ userlogin: async(req,res)=>{
       }
  
  
-    const  findproducts=await userSchemaData.findOne({_id:userId, wishlist: productId})
+    const  findproducts= await userSchemaData.findOne({_id:userId, wishlist: productId})
    //  console.log(findproducts);
      if(findproducts){
-      res.status(409).json({
+       return  res.status(409).json({
          status:"conflict",
          message:"product already on wishlist"
       })
      }
       
 
-     await userSchemaData.updateOne({_id:userId},{$push:{ wishlist: product }})
+     await userSchemaData.updateOne({_id:userId},{$push:{ wishlist: productId }})
         res.status(201).json({
          status:"success",
          message:"product added to wishlist succesfuly!"
         })
 
  }, 
-    
+    //view wishlist  
 
- 
+
+  
 
 }
