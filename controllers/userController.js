@@ -313,7 +313,38 @@ userlogin: async(req,res)=>{
  }, 
     //view wishlist  
 
+ viewWishlist: async(req,res)=>{
+    const userId=req.params.id
+    const user=await userSchemaData.findById(userId)
+
+    if(!user){
+        res.status(404).json({
+            status:"error",
+            message:"User Not found"
+        })
+    }
+    const WishListPrdtId=user.wishlist
+    // console.log(WishListPrdtId)
+
+    if(WishListPrdtId.length === 0){
+        return res.status(200).json({ 
+            status: "Succes", 
+            message: "User Wishlist is Emty", 
+            data: [] 
+            });
+    }
+    
+    const WishListproducts= await Allproducts.find({_id:{$in:WishListPrdtId}})
+    res.status(200).json({
+      status: "Success",
+      message: "Wishlist products fetched successfully",
+      data: WishListproducts
+})
+},
 
   
+
+
+
 
 }

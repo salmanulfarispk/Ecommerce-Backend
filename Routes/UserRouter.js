@@ -23,6 +23,7 @@ router
 .get("/:id/cart",Trycatchmiddleware(usercontroler.viewcart))
 .delete("/:id/cart/:proid",Trycatchmiddleware(usercontroler.dltCartProdct))
 .post("/:id/wishlist",Trycatchmiddleware(usercontroler.addTowishlist))
+.get("/:id/wishlist/",Trycatchmiddleware(usercontroler.viewWishlist))
 
 module.exports= router             
 
