@@ -100,7 +100,7 @@ userlogin: async(req,res)=>{
             res.status(200).json({
                status:"success",
                message:"login succesfull",
-               data:id,email,token
+               data:{id,email,token}
             })
 },
 
@@ -212,9 +212,41 @@ userlogin: async(req,res)=>{
 
    
 
+  // view cart
+
+  viewcart: async(req,res)=>{
+   const userId=req.params.id;
+   const user= await userSchemaData.findById(userId)
+   // console.log(user);
+   if(!user){
+      return res.status(404).json({
+         status:"error",
+         message:"user not found"
+      })
+   }
+   const cartprodId=user.cart;
+  
+   if( cartprodId.length ===0 ){
+      res.status(200).json({
+         status:"success",
+         message:"cart is empty",
+         data:[]
+      })
+   }
+
+   const cartproducts= await userSchemaData.findOne({_id:userId}).populate("cart.productsId")
+   //   console.log(cartproducts);
+   res.status(200).json({
+      status:"success",
+      message:"cart product fetched succesfully",
+      data: cartproducts
+   })
+
+
+  },
 
  
-   
+    
 
  
 

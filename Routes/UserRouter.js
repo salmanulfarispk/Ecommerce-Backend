@@ -22,7 +22,6 @@ router
 .post("/:id/cart",Trycatchmiddleware(usercontroler. addToCart))
 .get("/:id/cart",Trycatchmiddleware(usercontroler.viewcart))
 
-
 module.exports= router             
 
 
