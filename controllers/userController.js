@@ -245,7 +245,32 @@ userlogin: async(req,res)=>{
 
   },
 
- 
+ //delete cart product
+
+ dltCartProdct: async(req,res)=>{
+   const userId=req.params.id;
+   const prodId=req.params.proid;
+
+   const user= await userSchemaData.findById(userId)
+   if(!user){
+      res.status(400).json({message:"user not found"})
+   }
+   if(!prodId){
+      res.status(400).json({message:"product not found"})
+   }
+
+    const result = await userSchemaData.updateOne({_id:userId},{$pull: { cart:{ productsId:prodId } }})
+      
+    if(result.modifiedCount > 0){
+      res.status(200).json({
+         status:"success",
+         message:"product removed from cart succesfully"})
+    }else{
+      res.status(400).json({message:"product not found in the cart"})
+    }
+
+
+ },
     
 
  

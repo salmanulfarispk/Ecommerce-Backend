@@ -21,6 +21,7 @@ router
 .get("/products/category/:categoryname",Trycatchmiddleware(usercontroler.productByCategory))
 .post("/:id/cart",Trycatchmiddleware(usercontroler. addToCart))
 .get("/:id/cart",Trycatchmiddleware(usercontroler.viewcart))
+.delete("/:id/cart/:proid",Trycatchmiddleware(usercontroler.dltCartProdct))
 
 module.exports= router             
 
