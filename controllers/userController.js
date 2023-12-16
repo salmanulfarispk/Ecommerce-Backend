@@ -322,7 +322,7 @@ userlogin: async(req,res)=>{
             status:"error",
             message:"User Not found"
         })
-    }
+    } 
     const WishListPrdtId=user.wishlist
     // console.log(WishListPrdtId)
 
@@ -342,7 +342,37 @@ userlogin: async(req,res)=>{
 })
 },
 
+//Delete wishlist
+
+dletwishlist:async(req,res)=>{
+   const userid=req.params.id;
+   const user=await userSchemaData.findById(userid)
+   if(!user){
+      res.status(404).json({
+         status:"error",
+         messsage:"user not found"
+      })
+   }
+    
+   const { productId }=req.body;
+   if(!productId){
+      return res.status(404).json({
+         status:"error",
+         message:"product not found"
+      })
+   }
+
+   await userSchemaData.updateOne({_id:userid},{$pull:{wishlist:productId}})
+     return res.status(200).json({
+      status:"success",
+      message:"product succesfully removed from wishlist"
+     })
+
+},
   
+
+
+
 
 
 
