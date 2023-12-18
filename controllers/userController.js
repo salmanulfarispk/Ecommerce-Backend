@@ -6,8 +6,9 @@ const Allproducts=require("../models/productSchema")
 const userSchemaData=require("../models/userSchema")
 const { ObjectId } = require('mongoose').Types;
 const cookie=require("cookie")
+const stripe=require("stripe")(process.env.STRIPE_SECRET_KEY)
 
-
+let sValue={}
 
 
 module.exports={
@@ -369,8 +370,89 @@ dletwishlist:async(req,res)=>{
      })
 
 },
-  
+  //payment section
 
+  payment: async(req,res)=>{
+   const userid=req.params.id;
+   // console.log(userid);
+   const user=await userSchemaData.findOne({ _id: userid }).populate('cart.productsId');
+   if(!user){
+      res.status(404).json({
+         status:"error",
+         message:"user not found"
+      })
+   }
+
+ 
+   const cartproduct=user.cart;
+   if(cartproduct.length === 0){
+      return res.status(200).json({
+         message:"user cart is empty",
+         data:[]
+      })
+   }
+   //  console.log(cartproduct);
+
+     const paymentItems = cartproduct.map((item) => {
+      return {
+        price_data: {
+          currency: "inr",
+          product_data: {
+            name: item.productsId.title,
+            description: item.productsId.description,
+          },
+          unit_amount: Math.round(item.productsId.price * 100), 
+        },
+        quantity: 1,
+      };
+      });
+    
+
+      const session = await stripe.checkout.sessions.create({
+         payment_method_types: ["card"],
+         line_items: paymentItems,
+         mode: "payment",
+         success_url: "http://localhost:3000/api/users/payment/success",
+         cancel_url: "http://localhost:3000/api/users/payment/cancel",
+       });
+  if(!session){
+   res.status(404).json({
+      status:"failure",
+      message:"error occured in session side"
+   })
+  }
+
+   sValue={
+   userid,
+   user,
+   session
+  }
+  console.log(sValue);
+   
+  res.status(200).json({
+   status:"success",
+   message:"stripe payment session created succesfully",
+   url: session.url
+  })
+
+
+},
+ 
+ 
+// success payment
+
+success: async(req,res)=>{
+   const { userid,user,session}=sValue;
+   // console.log(sValue)
+   console.log(user);
+   console.log(userid);
+   console.log(session);
+   // const userId=user._id;
+   // const cartitems=user.cart;
+   // console.log(userId);
+   // console.log(cartitems);
+
+}
 
 
 

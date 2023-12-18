@@ -25,8 +25,10 @@ router
 .post("/:id/wishlist",Trycatchmiddleware(usercontroler.addTowishlist))
 .get("/:id/wishlist",Trycatchmiddleware(usercontroler.viewWishlist))
 .delete("/:id/wishlist",Trycatchmiddleware(usercontroler.dletwishlist))
+.post("/:id/payment",Trycatchmiddleware(usercontroler.payment))
+.get("/payment/success",Trycatchmiddleware(usercontroler.success))
 
-module.exports= router             
+module.exports= router              
 
  
  
