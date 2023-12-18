@@ -27,9 +27,9 @@ router
 .delete("/:id/wishlist",Trycatchmiddleware(usercontroler.dletwishlist))
 .post("/:id/payment",Trycatchmiddleware(usercontroler.payment))
 .get("/payment/success",Trycatchmiddleware(usercontroler.success))
-
+.post("/payment/cancel",Trycatchmiddleware(usercontroler.Cancel))
 module.exports= router              
 
- 
+    
  
         
