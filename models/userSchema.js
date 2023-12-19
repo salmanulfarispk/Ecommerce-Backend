@@ -12,7 +12,8 @@ const userSchema= new mongoose.Schema({
     username:String,
     password:String, 
     cart:[{ productsId: { type: mongoose.Schema.ObjectId, ref: "allproducts" } }],
-    wishlist:[{type:mongoose.Schema.ObjectId, ref:"allproducts"}]
+    wishlist:[{type:mongoose.Schema.ObjectId, ref:"allproducts"}],
+    orders: [{ type: mongoose.Schema.ObjectId, ref: "orders" }]
 })
 
 

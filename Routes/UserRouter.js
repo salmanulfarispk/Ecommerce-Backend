@@ -13,7 +13,7 @@ router
 .post('/register',Trycatchmiddleware(usercontroler.userRegister))
 .post('/login',Trycatchmiddleware(usercontroler.userlogin))
 
-
+    
 .use(verifyToken)
 
 .get('/products',Trycatchmiddleware(usercontroler.viewAllProduct))
@@ -28,8 +28,11 @@ router
 .post("/:id/payment",Trycatchmiddleware(usercontroler.payment))
 .get("/payment/success",Trycatchmiddleware(usercontroler.success))
 .post("/payment/cancel",Trycatchmiddleware(usercontroler.Cancel))
+.get("/:id/orders",Trycatchmiddleware(usercontroler.orderDetails))
+
+ 
 module.exports= router              
 
-    
+     
  
         

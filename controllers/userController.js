@@ -177,7 +177,7 @@ userlogin: async(req,res)=>{
       } 
 
       const { productId } = req.body;
-         //   console.log(productId);
+         //   console.log(productId);  
 
       if (!productId) {
       return res.status(404).json({
@@ -388,21 +388,21 @@ dletwishlist:async(req,res)=>{
       })
    }
    //  console.log(cartproduct);
-
-     const paymentItems = cartproduct.map((item) => {
+   const paymentItems = cartproduct.map((item) => {
       return {
         price_data: {
           currency: "inr",
           product_data: {
             name: item.productsId.title,
+            images: [item.productsId.image], 
             description: item.productsId.description,
           },
           unit_amount: Math.round(item.productsId.price * 100), 
         },
         quantity: 1,
       };
-      });
-    
+    });
+     
 
       const session = await stripe.checkout.sessions.create({
          payment_method_types: ["card"],
@@ -491,7 +491,31 @@ const userUpdate=await userSchemaData.updateOne({_id:userId},
    })
 },
 
+//user order details
 
+orderDetails: async(req,res)=>{
+   const userId=req.params.id;
+   const user=await userSchemaData.findOne({_id:userId}).populate("orders")
+   // console.log("userrrr",user);
+
+   const orderedProdct=user.orders;
+   
+   if(orderedProdct.length === 0){
+      return res.status(404).json({
+         message:"you dont have any ordered products",
+         data:[]
+      })
+   }
+
+    const oredereditems=await order.find({_id:{ $in:orderedProdct}}).populate("products")
+    res.status(200).json({
+      message:"ordered details founded",
+      data:oredereditems
+    })
+
+
+}
+ 
 
 
 }
