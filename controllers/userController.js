@@ -8,6 +8,7 @@ const { ObjectId } = require('mongoose').Types;
 const cookie=require("cookie")
 const stripe=require("stripe")(process.env.STRIPE_SECRET_KEY)
 const order=require("../models/orderSchema")
+const productSchema = require("../models/productSchema")
 
 let sValue={}
 
@@ -21,7 +22,7 @@ userRegister: async(req,res)=>{
 const {value,error}= joiuserSchema.validate(req.body);
 
  if(error){
-    res.status(400).json({
+    return res.status(400).json({
         status:"error",
         message:"invalid user input data.please check the data"
     });
@@ -33,20 +34,23 @@ const {value,error}= joiuserSchema.validate(req.body);
     const { name,email,username,password}=value
    //  console.log("data is ",value);  
 
+
+   const hashedPassword = await bcrypt.hash(password, 10);
+
    await userSchemaData.create({
       name,
       email,
       username,
-      password,
+      password:hashedPassword ,
    });
 
-     res.status(201).json({
+    return res.status(201).json({
       status:"success",
       message:"user registration succesfull"
      })
-
+ 
  }catch{
-   res.status(500).json({
+    res.status(500).json({
       status:"error occured",
       message:"internal server error"
    })
@@ -135,7 +139,7 @@ userlogin: async(req,res)=>{
             message:"product not found"
          })
       }
-      res.status(200).json({
+     return res.status(200).json({
          status:"success",
          message:"product founded succesfuly",
          data:{product}
@@ -155,7 +159,7 @@ userlogin: async(req,res)=>{
             message:"product not found"
          })
       }
-      res.status(200).json({
+      return res.status(200).json({
          status:"success",
          message:"product founded sucesfuly",
          data:product
@@ -193,14 +197,14 @@ userlogin: async(req,res)=>{
 
       try {
       await userSchemaData.updateOne({ _id: user._id }, { $addToSet: { cart:productObject } });
-      res.status(200).json({
+       return res.status(200).json({
           status: "success",
           message: "Product Successfully Added To Cart",
       });
 
       } catch (error) {
       console.error(error);
-      res.status(500).json({
+       return res.status(500).json({
           status: "error",
           message: "Internal Server Error",
       });
@@ -224,7 +228,7 @@ userlogin: async(req,res)=>{
    const cartprodId=user.cart;
   
    if( cartprodId.length ===0 ){
-      res.status(200).json({
+      return  res.status(200).json({
          status:"success",
          message:"cart is empty",
          data:[]
@@ -250,7 +254,7 @@ userlogin: async(req,res)=>{
 
    const user= await userSchemaData.findById(userId)
    if(!user){
-      res.status(400).json({message:"user not found"})
+     return res.status(400).json({message:"user not found"})
    }
    if(!prodId){
       res.status(400).json({message:"product not found"})
@@ -275,7 +279,7 @@ userlogin: async(req,res)=>{
     const userId=req.params.id;
     const user=await userSchemaData.findById(userId)
     if(!user){
-      res.status(404).json({
+      return res.status(404).json({
          status:"errror",
          message:"user not found"
       })
@@ -285,7 +289,7 @@ userlogin: async(req,res)=>{
       const product= await Allproducts.findById(productId)
       // console.log(product);
       if(!product){
-         res.status(404).json({
+         return res.status(404).json({
             message:"product not found"
          })
       }
@@ -315,7 +319,7 @@ userlogin: async(req,res)=>{
     const user=await userSchemaData.findById(userId)
 
     if(!user){
-        res.status(404).json({
+        return res.status(404).json({
             status:"error",
             message:"User Not found"
         })
@@ -373,7 +377,7 @@ dletwishlist:async(req,res)=>{
    // console.log(userid);
    const user=await userSchemaData.findOne({ _id: userid }).populate('cart.productsId');
    if(!user){
-      res.status(404).json({
+      return res.status(404).json({
          status:"error",
          message:"user not found"
       })
@@ -514,8 +518,8 @@ orderDetails: async(req,res)=>{
     })
 
 
-}
- 
+},
+
 
 
 }

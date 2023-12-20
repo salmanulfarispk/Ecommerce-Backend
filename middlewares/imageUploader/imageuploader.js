@@ -49,7 +49,7 @@ const imageUpload=(req,res, next)=>{
                 console.log("Error in unlinking the file");
                 }
             })
-
+         
             next()
         }
 

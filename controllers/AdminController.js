@@ -3,6 +3,7 @@ const userDatabase=require("../models/userSchema")
 const Allproducts=require("../models/productSchema")
 const {joiproductSchema}=require("../models/validationSchema")
 const { default: mongoose } = require("mongoose")
+const orderSchema=require("../models/orderSchema")
 
 
 
@@ -87,6 +88,7 @@ module.exports={
     addproducts: async(req,res)=>{
 
         const {value,error}=  joiproductSchema.validate(req.body);
+        // console.log(value);
         if(error){
           return res.status(404).json({
             error:error.details[0].message
@@ -195,11 +197,51 @@ module.exports={
    },
 
    //Admin view orderDetails
-   
 
+viewOrderDetails: async(req,res)=>{
 
+  const products=await orderSchema.find()
+  if(products.length === 0){
+    res.status(404).json({
+      status:"errror",
+      message:"No Order Details "
+    })
+  }
 
+  res.status(200).json({
+    status:"success",
+    message:"order details succesfully fetched ",
+    data:products
+  })
 
+},
+
+//Total revenue generated
+
+status: async(req,res)=>{
+  const Totalrevenue= await orderSchema.aggregate([
+  {
+    $group:{ _id:null,
+             totalproduct:{$sum: {$size: "$products"}},
+            totalrevenue:{$sum : "$total_amount"},
+    }
+  }
+  ])
+
+   if(Totalrevenue.length > 0){
+      res.status(200).json({
+        status:"success",
+        data:Totalrevenue[0]
+      })
+   }else{
+        res.status(200).json({
+          status:"success",
+          data:{ totalproduct:0 ,totalrevenue: 0}
+        })
+
+   }
+
+}
 
 
 }
