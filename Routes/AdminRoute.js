@@ -25,6 +25,7 @@ router
 .put("/products",Trycatchmiddleware(admincontroller.editproducts))
 .get("/orders",Trycatchmiddleware(admincontroller.viewOrderDetails))
 .get("/RevenueStatus",Trycatchmiddleware(admincontroller.status))
+
  
- 
+  
 module.exports=router

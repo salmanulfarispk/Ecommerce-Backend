@@ -8,7 +8,7 @@ const { ObjectId } = require('mongoose').Types;
 const cookie=require("cookie")
 const stripe=require("stripe")(process.env.STRIPE_SECRET_KEY)
 const order=require("../models/orderSchema")
-const productSchema = require("../models/productSchema")
+
 
 let sValue={}
 
@@ -407,7 +407,7 @@ dletwishlist:async(req,res)=>{
       };
     });
      
-
+   
       const session = await stripe.checkout.sessions.create({
          payment_method_types: ["card"],
          line_items: paymentItems,
@@ -472,7 +472,7 @@ const orderId=orders._id;
 
 const userUpdate=await userSchemaData.updateOne({_id:userId},
    { $push:{ orders:orderId }, $set:{ cart:[] } }, { new:true }  );
-
+                                                    
    if (userUpdate) {
       res.status(200).json({
         status: "Success",
@@ -481,7 +481,7 @@ const userUpdate=await userSchemaData.updateOne({_id:userId},
     } else {
       res.status(500).json({
         status: "Error",
-        message: "Failed to update user data.",
+        message: "Failed to update user data.", 
       });
     }
 },
